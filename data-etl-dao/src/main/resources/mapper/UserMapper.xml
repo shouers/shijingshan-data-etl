@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ubdi.dao.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="com.ubdi.domain.User">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="login_name" jdbcType="VARCHAR" property="loginName"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="id_card" jdbcType="VARCHAR" property="idCard"/>
+        <result column="cell_phone" jdbcType="VARCHAR" property="cellPhone"/>
+        <result column="street_id" jdbcType="BIGINT" property="streetId"/>
+        <result column="community_id" jdbcType="BIGINT" property="communityId"/>
+        <result column="create_user" jdbcType="BIGINT" property="createUser"/>
+        <result column="update_user" jdbcType="BIGINT" property="updateUser"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="status" jdbcType="CHAR" property="status"/>
+    </resultMap>
+
+    <select id="getPassword" parameterType="string" resultType="string">
+        select password from user where login_name = #{loginName}
+    </select>
+
+    <select id="selectByLoginName" parameterType="string" resultMap="BaseResultMap">
+        select * from user where login_name = #{loginName}
+    </select>
+
+    <update id="updatePassword">
+        update `user`
+        <!-- set会自动去掉最后一个, -->
+        <set>
+            <if test="password != null">
+                password = #{password}
+            </if>
+        </set>
+        where id = #{userId}
+    </update>
+
+    <select id="selectUserByCid" resultMap="BaseResultMap">
+        select *
+        from user
+        where  create_user = #{createUser}
+    </select>
+
+    <select id="getRole" resultType="integer">
+        select role_id role
+        from user_role
+        where user_id = #{userId}
+    </select>
+
+</mapper>
